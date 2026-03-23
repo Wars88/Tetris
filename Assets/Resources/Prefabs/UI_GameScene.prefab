@@ -630,7 +630,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -18.598328, y: 2.0664062}
+  m_AnchoredPosition: {x: -18.598389, y: 2.0664062}
   m_SizeDelta: {x: 359.5664, y: 301.7051}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4064533912593180106
@@ -880,8 +880,9 @@ GameObject:
   - component: {fileID: 633154231427062340}
   - component: {fileID: 1869219247482225481}
   - component: {fileID: 5069359520405255637}
+  - component: {fileID: 3911799341206408084}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI_GameScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -977,6 +978,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3911799341206408084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2785058223295648324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd74c2c6530eebb4aafbb13ead7391fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Won.UI_GamePanel
 --- !u!1 &3508815644882929128
 GameObject:
   m_ObjectHideFlags: 0
