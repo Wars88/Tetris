@@ -1,0 +1,81 @@
+# =========================
+# Unity Generated Folders
+# =========================
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# =========================
+# Memory Captures
+# =========================
+MemoryCaptures/
+
+# =========================
+# IDE (Visual Studio / Rider / VSCode)
+# =========================
+.vs/
+.idea/
+.vscode/
+
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# =========================
+# OS Generated
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Unity Cache / Tools
+# =========================
+/Assets/AssetStoreTools*
+
+# =========================
+# Addressables build
+# =========================
+/Assets/StreamingAssets/aa*
+
+# =========================
+# Crash Reports
+# =========================
+sysinfo.txt
+
+# =========================
+# Build Results
+# =========================
+*.apk
+*.aab
+*.unitypackage
+*.app
+*.exe
+*.ipa
+
+# =========================
+# Logs
+# =========================
+*.log
+*.stacktrace
+
+# =========================
+# ❗ Custom Ignore
+# =========================
+# Ignore only this specific folder
+Assets/@ThirdParty
