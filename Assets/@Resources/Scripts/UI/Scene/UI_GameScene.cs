@@ -1,3 +1,5 @@
+using static Won.Define;
+
 namespace Won
 {
     public class UI_GameScene : UI_Scene
@@ -35,15 +37,14 @@ namespace Won
             return true;
         }
 
-        public void SetInfo()
+        public void SetInfo(Tetromino[] previewBlocks)
         {
+
             
-            RefreshUI();
         }
 
         private void RefreshUI()
         {
-            
         }
     }
 }

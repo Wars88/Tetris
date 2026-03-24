@@ -1,27 +1,42 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 using static Won.Define;
+using Random = UnityEngine.Random;
 
 namespace Won
 {
-    public class BoardManager
+    public class Piece
+    {
+        public Tetromino Tetromino { get; set; }
+        public Vector2Int Pos { get; set; }
+        public int Rotation { get; set; }
+
+        public Piece(Tetromino tetromino, Vector2Int pos, int rotation)
+        {
+            Tetromino = tetromino;
+            Pos = pos;
+            Rotation = rotation;
+        }
+    }
+    
+    public class Board
     {
         public const int Width = 10;
-        public const int Height = 20;
+        public const int VisibleHeight  = 20;
+        public const int HiddenHeight = 4;
+        public const int Height = VisibleHeight + HiddenHeight;   
 
         public int[,] Grid { get; private set; } = new int[Height, Width];
 
-        public Tetromino CurrentTetromino { get; private set; }
-        public Vector2Int CurrentPos { get; private set; }
-        public int CurrentRotation { get; private set; }
-
+        public Piece CurrentPiece { get; private set; }
         public Queue<Tetromino> NextBlockQueue { get; private set; } = new ();
 
-        public void Init()
+        public Board()
         {
             NextBlockQueue.Clear();
-            RefillBag();
             ClearGrid();
+            RefillBag();
         }
 
         public void ClearGrid()
@@ -60,52 +75,36 @@ namespace Won
 
         public Tetromino GetNextBlock()
         {
-            if (NextBlockQueue.Count < 7)
-            {
+            if (NextBlockQueue.Count < Enum.GetValues(typeof(Tetromino)).Length)
                 RefillBag();
-            }
             return NextBlockQueue.Dequeue();
-        }
-
-        // UI 표시에 사용할 다음 블록들 미리보기 배열
-        public Tetromino[] PeekNextBlocks(int count = 3)
-        {
-            if (NextBlockQueue.Count < count)
-            {
-                RefillBag();
-            }
-            
-            Tetromino[] preview = new Tetromino[count];
-            int idx = 0;
-            foreach (var block in NextBlockQueue)
-            {
-                preview[idx++] = block;
-                if (idx >= count)
-                    break;
-            }
-            return preview;
         }
 
         public void SpawnNextTetromino()
         {
-            CurrentTetromino = GetNextBlock();
-            CurrentRotation = 0;
-            // 상단 중앙에서 스폰
-            CurrentPos = new Vector2Int(Width / 2, Height - 2); 
+            Tetromino nextBlock = GetNextBlock();
+            Vector2Int pos = new Vector2Int(Width / 2, Height - 2);
+            int rotation = 0;
 
-            if (!IsValidPosition(CurrentPos, CurrentRotation))
+            Piece piece = new Piece(nextBlock, pos, rotation);
+        
+            // 상단 중앙에서 스폰
+            if (!IsValidPosition(piece, pos, rotation))
             {
                 Debug.Log("Game Over: Block blocked on spawn!");
                 // 게임 오버 이벤트 트리거
+                
+                return;
             }
+            CurrentPiece = piece;
         }
 
         public bool Move(Vector2Int direction)
         {
-            Vector2Int newPos = CurrentPos + direction;
-            if (IsValidPosition(newPos, CurrentRotation))
+            Vector2Int newPos = CurrentPiece.Pos + direction;
+            if (IsValidPosition(CurrentPiece, newPos, CurrentPiece.Rotation))
             {
-                CurrentPos = newPos;
+                CurrentPiece.Pos = newPos;
                 return true;
             }
             return false;
@@ -113,10 +112,10 @@ namespace Won
 
         public bool Rotate()
         {
-            int newRotation = (CurrentRotation + 1) % 4;
-            if (IsValidPosition(CurrentPos, newRotation))
+            int newRotation = (CurrentPiece.Rotation + 1) % 4;
+            if (IsValidPosition(CurrentPiece, CurrentPiece.Pos, newRotation))
             {
-                CurrentRotation = newRotation;
+                CurrentPiece.Rotation = newRotation;
                 return true;
             }
             return false;
@@ -124,12 +123,12 @@ namespace Won
 
         public void LockPiece()
         {
-            Vector2Int[,] cells = BlockData.Cells[CurrentTetromino];
+            Vector2Int[] cells = BlockData.Cells[CurrentPiece.Tetromino][CurrentPiece.Rotation];
             for (int i = 0; i < 4; i++)
             {
-                Vector2Int offset = cells[CurrentRotation, i];
-                int x = CurrentPos.x + offset.x;
-                int y = CurrentPos.y + offset.y;
+                Vector2Int offset = cells[i];
+                int x = CurrentPiece.Pos.x + offset.x;
+                int y = CurrentPiece.Pos.y + offset.y;
 
                 if (y >= 0 && y < Height && x >= 0 && x < Width)
                 {
@@ -137,7 +136,8 @@ namespace Won
                 }
             }
             CheckLines();
-            // 블록이 바닥에 고정되면 바로 다음 블록 스폰
+            
+            // TODO: 고정하고 라인 클리어 다 하고 그제서야 내려오도록.
             SpawnNextTetromino();
         }
 
@@ -179,12 +179,13 @@ namespace Won
             }
         }
 
-        public bool IsValidPosition(Vector2Int pos, int rotation)
+        public bool IsValidPosition(Piece piece, Vector2Int pos, int rot)
         {
-            Vector2Int[,] cells = BlockData.Cells[CurrentTetromino];
+            Vector2Int[] cells = BlockData.Cells[piece.Tetromino][rot];
+
             for (int i = 0; i < 4; i++)
             {
-                Vector2Int offset = cells[rotation, i];
+                Vector2Int offset = cells[i];
                 int x = pos.x + offset.x;
                 int y = pos.y + offset.y;
 
@@ -194,7 +195,10 @@ namespace Won
                 if (Grid[y, x] != 0)
                     return false;
             }
+
             return true;
         }
+           
+
     }
 }

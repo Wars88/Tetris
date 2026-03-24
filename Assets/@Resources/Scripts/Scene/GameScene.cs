@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using static Won.Define;
 
 namespace Won
 {
@@ -11,6 +12,8 @@ namespace Won
                 return false;
 
             Managers.UIManager.ShowSceneUI<UI_GameScene>();
+            Managers.ResourceManager.Instantiate(TetrisControllerPath);
+
             Debug.Log("초기화 완료");
             return true;
         }

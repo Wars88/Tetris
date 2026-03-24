@@ -8,18 +8,15 @@ namespace Won
         private static Managers s_instance;
         public static Managers Instance { get { Init(); return s_instance; }}
 
-        private BoardManager _boardManager = new BoardManager();
         private ResourceManager _rescourceManager = new ResourceManager();
         private SoundManager _soundManager = new SoundManager();
         private UIManager _uiManager = new UIManager();
+        private InputManager _inputManager = new InputManager(); // 🆕 추가
 
-        
-
-        public static BoardManager BoardManager { get { return Instance?._boardManager; }}
         public static ResourceManager ResourceManager { get { return Instance?._rescourceManager; }}
         public static SoundManager SoundManager { get { return Instance?._soundManager; }}
         public static UIManager UIManager { get { return Instance?._uiManager; }}
-        
+        public static InputManager InputManager { get { return Instance?._inputManager; }} // 🆕 추가
 
         public static void Init()
         {
@@ -34,6 +31,8 @@ namespace Won
                 }
                 DontDestroyOnLoad(go);
                 s_instance = go.GetComponent<Managers>();
+
+                s_instance._inputManager.Init();
             }
         }
 
